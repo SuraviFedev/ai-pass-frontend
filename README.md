@@ -3,6 +3,7 @@
 Mini AI-Pass web app built with Angular as a dashboard-style AI workspace and marketplace experience.
 
 ## Live Demo
+https://willowy-dolphin-791016.netlify.app/
 
 
 ## Repository
