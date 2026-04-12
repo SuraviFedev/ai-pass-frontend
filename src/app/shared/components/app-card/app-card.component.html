@@ -1,0 +1,19 @@
+<div class="app-card">
+  <div class="top-row">
+    <div class="app-icon">{{ name.charAt(0) }}</div>
+    <app-status-badge [status]="status"></app-status-badge>
+  </div>
+
+  <div class="content">
+    <span class="category">{{ category }}</span>
+    <h3>{{ name }}</h3>
+    <p>{{ description }}</p>
+  </div>
+
+  <div class="footer">
+    <span class="meta">Integration-ready</span>
+    <button class="cta" type="button" (click)="onActionClick()">
+      {{ actionLabel }}
+    </button>
+  </div>
+</div>

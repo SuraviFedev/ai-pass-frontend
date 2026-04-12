@@ -1,0 +1,200 @@
+<app-page-title
+  title="Usage & Wallet"
+  subtitle="Track plan details, credit consumption, and active AI product usage across your workspace."
+></app-page-title>
+
+<div class="usage-page">
+  <app-section-card title="Plan Overview">
+    <div class="plan-overview">
+      <div class="plan-copy">
+        <span class="plan-label">Current Plan</span>
+        <h3>{{ usage.currentPlan }}</h3>
+        <p>
+          Your workspace is actively using credits across AI analysis, invoice processing,
+          and app access workflows.
+        </p>
+      </div>
+
+      <div class="plan-actions">
+        <button class="secondary-btn" type="button" (click)="openBillingModal()">
+          Billing History
+        </button>
+        <button class="primary-btn" type="button" (click)="openUpgradeModal()">
+          Upgrade Plan
+        </button>
+      </div>
+    </div>
+
+    <div class="usage-progress-wrap">
+      <div class="progress-header">
+        <span>Credit Usage</span>
+        <strong>{{ usage.usedCredits }} / {{ usage.monthlyCredits }}</strong>
+      </div>
+
+      <app-progress-bar [value]="usagePercent"></app-progress-bar>
+
+      <div class="progress-meta">
+        <span>Remaining Credits: {{ usage.remainingCredits }}</span>
+        <span>{{ usagePercent | number:'1.0-0' }}% used</span>
+      </div>
+    </div>
+  </app-section-card>
+
+  <div class="stats-grid">
+    <app-stat-card
+      label="Monthly Credits"
+      [value]="usage.monthlyCredits.toString()"
+    ></app-stat-card>
+
+    <app-stat-card
+      label="AI Tasks Run"
+      [value]="usage.aiTasksRun.toString()"
+    ></app-stat-card>
+
+    <app-stat-card
+      label="Active Apps"
+      [value]="usage.activeApps.toString()"
+    ></app-stat-card>
+
+    <app-stat-card
+      label="Remaining Credits"
+      [value]="usage.remainingCredits.toString()"
+    ></app-stat-card>
+  </div>
+
+  <div class="usage-detail-grid">
+    <app-section-card title="Usage Breakdown">
+      <div class="breakdown-list">
+        <div class="breakdown-item">
+          <div>
+            <strong>Analysis Studio</strong>
+            <p>AI tool evaluations and recommendation generation</p>
+          </div>
+          <span>2,150 credits</span>
+        </div>
+
+        <div class="breakdown-item">
+          <div>
+            <strong>Invoice AI</strong>
+            <p>Invoice extraction, validation, and review workflows</p>
+          </div>
+          <span>1,840 credits</span>
+        </div>
+
+        <div class="breakdown-item">
+          <div>
+            <strong>Marketplace App Access</strong>
+            <p>App launches, marketplace exploration, and feature usage</p>
+          </div>
+          <span>1,120 credits</span>
+        </div>
+
+        <div class="breakdown-item">
+          <div>
+            <strong>Workspace Operations</strong>
+            <p>Dashboard actions, automations, and supporting tasks</p>
+          </div>
+          <span>1,290 credits</span>
+        </div>
+      </div>
+    </app-section-card>
+
+    <app-section-card title="Plan Benefits">
+      <div class="benefits-list">
+        <div class="benefit-item">
+          <span class="dot"></span>
+          <p>Access to live AI marketplace apps</p>
+        </div>
+
+        <div class="benefit-item">
+          <span class="dot"></span>
+          <p>Structured AI analysis and recommendation tools</p>
+        </div>
+
+        <div class="benefit-item">
+          <span class="dot"></span>
+          <p>Invoice document processing and review support</p>
+        </div>
+
+        <div class="benefit-item">
+          <span class="dot"></span>
+          <p>Usage visibility and centralized workspace management</p>
+        </div>
+      </div>
+    </app-section-card>
+  </div>
+</div>
+
+<!-- Billing History Modal -->
+<div class="modal-backdrop" *ngIf="showBillingModal" (click)="closeBillingModal()">
+  <div class="modal-card" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <div>
+        <h3>Billing History</h3>
+        <p>Review recent invoice payments for your workspace plan.</p>
+      </div>
+      <button class="modal-close" type="button" (click)="closeBillingModal()">×</button>
+    </div>
+
+    <div class="billing-list">
+      <div class="billing-row billing-row--head">
+        <span>Invoice</span>
+        <span>Date</span>
+        <span>Amount</span>
+        <span>Status</span>
+      </div>
+
+      <div class="billing-row" *ngFor="let item of billingHistory">
+        <span>{{ item.id }}</span>
+        <span>{{ item.date }}</span>
+        <span>{{ item.amount }}</span>
+        <span class="paid-status">{{ item.status }}</span>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="secondary-btn" type="button" (click)="closeBillingModal()">
+        Close
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Upgrade Plan Modal -->
+<div class="modal-backdrop" *ngIf="showUpgradeModal" (click)="closeUpgradeModal()">
+  <div class="modal-card modal-card--large" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <div>
+        <h3>Upgrade Plan</h3>
+        <p>Select a plan tier that matches your credit and workflow needs.</p>
+      </div>
+      <button class="modal-close" type="button" (click)="closeUpgradeModal()">×</button>
+    </div>
+
+    <div class="plan-grid">
+      <div
+        class="plan-option"
+        *ngFor="let plan of plans"
+        [class.plan-option--active]="plan.name === selectedPlan"
+      >
+        <div class="plan-option__top">
+          <span class="plan-option__name">{{ plan.name }}</span>
+          <strong class="plan-option__price">{{ plan.price }}</strong>
+        </div>
+
+        <p class="plan-option__credits">{{ plan.credits }}</p>
+        <p class="plan-option__description">{{ plan.description }}</p>
+
+        <button class="primary-btn" type="button" (click)="choosePlan(plan.name)">
+          Select Plan
+        </button>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="secondary-btn" type="button" (click)="closeUpgradeModal()">
+        Close
+      </button>
+    </div>
+  </div>
+</div>

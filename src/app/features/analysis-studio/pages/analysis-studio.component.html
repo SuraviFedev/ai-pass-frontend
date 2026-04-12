@@ -1,0 +1,110 @@
+<app-page-title
+  title="Analysis Studio"
+  subtitle="Analyze AI tools and generate structured insights for adoption, operations, and team workflows."
+></app-page-title>
+
+<div class="analysis-page">
+  <app-section-card title="AI Tool Analysis">
+    <div class="analysis-hero">
+      <div class="hero-copy">
+        <h3>Evaluate an AI tool before adoption</h3>
+        <p>
+          Enter a tool name or product description to generate a structured review
+          including strengths, use cases, limitations, and recommendation fit.
+        </p>
+      </div>
+
+      <div class="hero-badges">
+        <span>Structured Output</span>
+        <span>Business Use Cases</span>
+        <span>Decision Support</span>
+      </div>
+    </div>
+  </app-section-card>
+
+  <div class="analysis-layout">
+    <app-section-card title="Input Panel">
+      <div class="input-panel">
+        <label for="tool-name">Tool name or description</label>
+
+        <div class="input-row">
+          <input
+            id="tool-name"
+            [(ngModel)]="toolName"
+            placeholder="Try ChatGPT, Midjourney, Claude, or any AI tool"
+          />
+          <button type="button" (click)="analyze()" [disabled]="isLoading">
+            {{ isLoading ? 'Analyzing...' : 'Analyze' }}
+          </button>
+        </div>
+
+        <div class="suggested-tools">
+          <span>Suggested:</span>
+          <button
+            type="button"
+            class="suggest-chip"
+            *ngFor="let tool of suggestedTools"
+            (click)="setSuggestedTool(tool)"
+          >
+            {{ tool }}
+          </button>
+        </div>
+      </div>
+    </app-section-card>
+
+    <app-section-card title="Output Panel">
+      <div *ngIf="!result && !isLoading" class="empty-panel">
+        <div class="empty-icon">AI</div>
+        <h3>No analysis generated yet</h3>
+        <p>
+          Click Analyze to generate structured insights. If no tool is entered,
+          the page will use ChatGPT by default.
+        </p>
+      </div>
+
+      <div *ngIf="isLoading" class="loading-panel">
+        <div class="spinner"></div>
+        <h3>Analyzing tool...</h3>
+        <p>Generating summary, use cases, strengths, and recommendation.</p>
+      </div>
+
+      <div *ngIf="result" class="result-grid">
+        <div class="result-card summary-card">
+          <span class="card-label">Summary</span>
+          <h4>What the tool does</h4>
+          <p>{{ result.summary }}</p>
+        </div>
+
+        <div class="result-card">
+          <span class="card-label">Use Cases</span>
+          <h4>Where it is useful</h4>
+          <ul>
+            <li *ngFor="let item of result.useCases">{{ item }}</li>
+          </ul>
+        </div>
+
+        <div class="result-card">
+          <span class="card-label">Strengths</span>
+          <h4>Advantages</h4>
+          <ul>
+            <li *ngFor="let item of result.strengths">{{ item }}</li>
+          </ul>
+        </div>
+
+        <div class="result-card">
+          <span class="card-label">Limitations</span>
+          <h4>Weaknesses</h4>
+          <ul>
+            <li *ngFor="let item of result.limitations">{{ item }}</li>
+          </ul>
+        </div>
+
+        <div class="result-card recommendation-card">
+          <span class="card-label">Recommendation</span>
+          <h4>Who should use it and when</h4>
+          <p>{{ result.recommendation }}</p>
+        </div>
+      </div>
+    </app-section-card>
+  </div>
+</div>

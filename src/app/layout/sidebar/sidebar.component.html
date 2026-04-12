@@ -1,0 +1,21 @@
+<aside class="sidebar">
+  <div class="brand">
+    <div class="brand-mark">AI</div>
+    <div>
+      <h1>AI-Pass</h1>
+      <p>Workspace</p>
+    </div>
+  </div>
+
+  <nav class="nav">
+    <a
+      *ngFor="let item of navItems"
+      [routerLink]="item.route"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: item.route === '/' }"
+      class="nav-link"
+    >
+      {{ item.label }}
+    </a>
+  </nav>
+</aside>

@@ -1,0 +1,20 @@
+import { CommonModule } from '@angular/common';
+import { Component, computed, inject } from '@angular/core';
+import { ToastService } from '../../../core/services/toast.service';
+
+@Component({
+  selector: 'app-toast-container',
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: './toast-container.component.html',
+  styleUrls: ['./toast-container.component.scss'],
+})
+export class ToastContainerComponent {
+  private readonly toastService = inject(ToastService);
+
+  readonly toasts = computed(() => this.toastService.toasts());
+
+  removeToast(id: number): void {
+    this.toastService.remove(id);
+  }
+}

@@ -1,0 +1,133 @@
+<app-page-title
+  title="Automations"
+  subtitle="Configure and monitor workflow automations across invoice review, compliance, HR, and operational reporting."
+></app-page-title>
+
+<div class="automations-page">
+  <app-section-card title="Automation Overview">
+    <div class="overview">
+      <div>
+        <h3>Operational workflows on autopilot</h3>
+        <p>
+          Automations connect triggers, rules, and actions so teams can reduce
+          manual work and keep critical processes moving.
+        </p>
+      </div>
+
+      <div class="overview-stats">
+        <div class="mini-stat">
+          <span>Total</span>
+          <strong>{{ totalCount }}</strong>
+        </div>
+        <div class="mini-stat">
+          <span>Active</span>
+          <strong>{{ activeCount }}</strong>
+        </div>
+        <div class="mini-stat">
+          <span>Draft / Paused</span>
+          <strong>{{ nonActiveCount }}</strong>
+        </div>
+      </div>
+    </div>
+  </app-section-card>
+
+  <app-section-card title="Search & Filter">
+    <div class="toolbar">
+      <div class="search-box">
+        <label for="automation-search">Search automations</label>
+        <input
+          id="automation-search"
+          type="text"
+          [(ngModel)]="searchTerm"
+          placeholder="Search by workflow name, description, or owner"
+        />
+      </div>
+
+      <div class="filter-box">
+        <label for="automation-status">Status</label>
+        <select id="automation-status" [(ngModel)]="selectedStatus">
+          <option *ngFor="let status of statuses" [value]="status">
+            {{ status }}
+          </option>
+        </select>
+      </div>
+    </div>
+  </app-section-card>
+
+  <div class="results-header">
+    <h3>Workflow Automations</h3>
+    <span>{{ filteredAutomations().length }} result(s)</span>
+  </div>
+
+  <div class="automation-grid" *ngIf="filteredAutomations().length > 0; else noResults">
+    <app-section-card
+      *ngFor="let automation of filteredAutomations()"
+      [title]="automation.name"
+    >
+      <div class="automation-card">
+        <div class="card-top">
+          <p class="description">{{ automation.description }}</p>
+
+          <span
+            class="status-badge"
+            [class.active]="automation.status === 'Active'"
+            [class.draft]="automation.status === 'Draft'"
+            [class.paused]="automation.status === 'Paused'"
+          >
+            {{ automation.status }}
+          </span>
+        </div>
+
+        <div class="meta-grid">
+          <div class="meta-block">
+            <span class="label">Trigger</span>
+            <strong>{{ automation.trigger }}</strong>
+          </div>
+
+          <div class="meta-block">
+            <span class="label">Action</span>
+            <strong>{{ automation.action }}</strong>
+          </div>
+        </div>
+
+        <div class="info-row">
+          <span><strong>Owner:</strong> {{ automation.owner }}</span>
+          <span><strong>Last Run:</strong> {{ automation.lastRun }}</span>
+        </div>
+
+        <div class="button-row">
+          <button class="secondary-btn" type="button" (click)="toggleExpand(automation.id)">
+            {{ expandedAutomationId === automation.id ? 'Hide Details' : 'View Details' }}
+          </button>
+
+          <button class="secondary-btn" type="button" (click)="toggleStatus(automation)">
+            {{ automation.status === 'Active' ? 'Pause' : 'Activate' }}
+          </button>
+
+          <button class="primary-btn" type="button" (click)="runNow(automation)">
+            Run Now
+          </button>
+        </div>
+
+        <div class="expanded-panel" *ngIf="expandedAutomationId === automation.id">
+          <div class="expanded-row">
+            <span class="expanded-label">Workflow Logic</span>
+            <p>
+              When <strong>{{ automation.trigger }}</strong> occurs, the system will
+              automatically <strong>{{ automation.action }}</strong> and track the
+              result under the {{ automation.owner }} workflow queue.
+            </p>
+          </div>
+        </div>
+      </div>
+    </app-section-card>
+  </div>
+
+  <ng-template #noResults>
+    <app-section-card title="No matching automations">
+      <p class="empty-copy">
+        No automation matches your current filters. Try changing the search term or status.
+      </p>
+    </app-section-card>
+  </ng-template>
+</div>

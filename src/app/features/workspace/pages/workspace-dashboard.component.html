@@ -1,0 +1,30 @@
+<app-page-title
+  title="Workspace"
+  subtitle="Launch tasks, access apps, and review recent platform activity."
+></app-page-title>
+
+<div class="workspace-page">
+  <app-section-card title="Welcome back">
+    <p class="hero-copy">
+      Access your AI workspace, launch tools, and review operational insights from one dashboard.
+    </p>
+  </app-section-card>
+
+  <div class="grid">
+    <app-action-card
+      *ngFor="let action of actions"
+      [title]="action.title"
+      [description]="action.description"
+      [route]="action.route"
+    ></app-action-card>
+  </div>
+
+  <app-section-card title="Recent activity">
+    <ul class="activity-list">
+      <li *ngFor="let item of activity">
+        <span>{{ item.title }}</span>
+        <small>{{ item.time }}</small>
+      </li>
+    </ul>
+  </app-section-card>
+</div>

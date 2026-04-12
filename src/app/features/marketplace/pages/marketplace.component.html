@@ -1,0 +1,92 @@
+<app-page-title
+  title="AI Apps Marketplace"
+  subtitle="Discover, evaluate, and launch AI products across operations, finance, HR, and compliance."
+></app-page-title>
+
+<div class="marketplace-page">
+  <app-section-card title="Marketplace Overview">
+    <div class="marketplace-hero">
+      <div>
+        <h3>Explore AI tools built for enterprise workflows</h3>
+        <p>
+          Browse live and upcoming AI products, analyze adoption fit, and open tools
+          directly from your workspace.
+        </p>
+      </div>
+
+      <div class="hero-stats">
+        <div class="mini-stat">
+          <span>Total Apps</span>
+          <strong>{{ apps.length }}</strong>
+        </div>
+        <div class="mini-stat">
+          <span>Live</span>
+          <strong>{{ apps.filter(app => app.status === 'Live').length }}</strong>
+        </div>
+        <div class="mini-stat">
+          <span>Coming Soon</span>
+          <strong>{{ apps.filter(app => app.status === 'Coming Soon').length }}</strong>
+        </div>
+      </div>
+    </div>
+  </app-section-card>
+
+  <app-section-card title="Search & Filter">
+    <div class="toolbar">
+      <div class="search-box">
+        <label for="search">Search apps</label>
+        <input
+          id="search"
+          type="text"
+          [(ngModel)]="searchTerm"
+          placeholder="Search by app name, category, or description"
+        />
+      </div>
+
+      <div class="filter-box">
+        <label for="status">Status</label>
+        <select id="status" [(ngModel)]="selectedStatus">
+          <option *ngFor="let status of statuses" [value]="status">
+            {{ status }}
+          </option>
+        </select>
+      </div>
+
+      <div class="filter-box">
+        <label for="category">Category</label>
+        <select id="category" [(ngModel)]="selectedCategory">
+          <option *ngFor="let category of categories" [value]="category">
+            {{ category }}
+          </option>
+        </select>
+      </div>
+    </div>
+  </app-section-card>
+
+  <div class="results-header">
+    <h3>Available Apps</h3>
+    <span>{{ filteredApps.length }} result(s)</span>
+  </div>
+
+<div class="market-grid" *ngIf="filteredApps.length > 0; else noResults">
+  <app-app-card
+    *ngFor="let app of filteredApps"
+    [id]="app.id"
+    [name]="app.name"
+    [description]="app.description"
+    [category]="app.category"
+    [status]="app.status"
+    [actionLabel]="app.actionLabel"
+    (actionClick)="onAppAction(app)"
+  ></app-app-card>
+</div>
+
+  <ng-template #noResults>
+    <app-section-card title="No matching apps">
+      <p class="empty-copy">
+        No apps match your current filters. Try changing the search term or selecting a
+        different category.
+      </p>
+    </app-section-card>
+  </ng-template>
+</div>

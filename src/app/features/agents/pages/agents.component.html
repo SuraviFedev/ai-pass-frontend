@@ -1,0 +1,139 @@
+<app-page-title
+  title="AI Agents / Skills"
+  subtitle="Browse role-based AI agents and reusable skills across finance, HR, compliance, and operations."
+></app-page-title>
+
+<div class="agents-page">
+  <app-section-card title="Agent Overview">
+    <div class="overview">
+      <div>
+        <h3>Role-based AI support for core workflows</h3>
+        <p>
+          Agents package capabilities into reusable operational assistants so teams
+          can apply AI in a consistent, structured way.
+        </p>
+      </div>
+
+      <div class="overview-stats">
+        <div class="mini-stat">
+          <span>Total Agents</span>
+          <strong>{{ totalAgents }}</strong>
+        </div>
+        <div class="mini-stat">
+          <span>Available</span>
+          <strong>{{ availableAgents }}</strong>
+        </div>
+        <div class="mini-stat">
+          <span>In Progress</span>
+          <strong>{{ inProgressAgents }}</strong>
+        </div>
+      </div>
+    </div>
+  </app-section-card>
+
+  <app-section-card title="Search & Filter">
+    <div class="toolbar">
+      <div class="search-box">
+        <label for="agent-search">Search agents</label>
+        <input
+          id="agent-search"
+          type="text"
+          [(ngModel)]="searchTerm"
+          placeholder="Search by agent name, role, owner, or description"
+        />
+      </div>
+
+      <div class="filter-box">
+        <label for="agent-status">Status</label>
+        <select id="agent-status" [(ngModel)]="selectedStatus">
+          <option *ngFor="let status of statuses" [value]="status">
+            {{ status }}
+          </option>
+        </select>
+      </div>
+
+      <div class="filter-box">
+        <label for="agent-role">Role</label>
+        <select id="agent-role" [(ngModel)]="selectedRole">
+          <option *ngFor="let role of roles" [value]="role">
+            {{ role }}
+          </option>
+        </select>
+      </div>
+    </div>
+  </app-section-card>
+
+  <div class="results-header">
+    <h3>Available Agents</h3>
+    <span>{{ filteredAgents().length }} result(s)</span>
+  </div>
+
+  <div class="agent-grid" *ngIf="filteredAgents().length > 0; else noResults">
+    <app-section-card *ngFor="let agent of filteredAgents()" [title]="agent.name">
+      <div class="agent-card">
+        <div class="top-row">
+          <span class="role-pill">{{ agent.role }}</span>
+
+          <span
+            class="status-badge"
+            [class.available]="agent.status === 'Available'"
+            [class.training]="agent.status === 'Training'"
+            [class.beta]="agent.status === 'Beta'"
+          >
+            {{ agent.status }}
+          </span>
+        </div>
+
+        <p class="description">{{ agent.description }}</p>
+
+        <div class="skills-block">
+          <span class="skills-label">Skills</span>
+
+          <div class="skills-list">
+            <span class="skill-chip" *ngFor="let skill of agent.skills">
+              {{ skill }}
+            </span>
+          </div>
+        </div>
+
+        <div class="info-row">
+          <span><strong>Owner:</strong> {{ agent.owner }}</span>
+          <span><strong>Updated:</strong> {{ agent.lastUpdated }}</span>
+        </div>
+
+        <div class="button-row">
+          <button class="secondary-btn" type="button" (click)="toggleExpand(agent.id)">
+            {{ expandedAgentId === agent.id ? 'Hide Skills' : 'View Skills' }}
+          </button>
+
+          <button class="secondary-btn" type="button" (click)="runSkillCheck(agent)">
+            Run Skill Check
+          </button>
+
+          <button class="primary-btn" type="button" (click)="assignAgent(agent)">
+            Assign
+          </button>
+        </div>
+
+        <div class="expanded-panel" *ngIf="expandedAgentId === agent.id">
+          <span class="expanded-label">Expanded Skill Summary</span>
+          <p>
+            <strong>{{ agent.name }}</strong> supports the
+            <strong>{{ agent.role }}</strong> domain and is currently maintained by
+            <strong>{{ agent.owner }}</strong>. This agent can assist with
+            {{ agent.skills.join(', ').toLowerCase() }}.
+          </p>
+        </div>
+      </div>
+    </app-section-card>
+  </div>
+
+  <ng-template #noResults>
+    <app-section-card title="No matching agents">
+      <p class="empty-copy">
+        No agent matches your current filters. Try changing the search term, status,
+        or role.
+      </p>
+    </app-section-card>
+  </ng-template>
+</div>

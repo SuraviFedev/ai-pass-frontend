@@ -1,0 +1,76 @@
+<app-page-title
+  title="Invoice AI"
+  subtitle="Upload invoice documents, extract structured fields, and review decision outcomes."
+></app-page-title>
+
+<div class="invoice-page">
+  <app-section-card title="Invoice Processing Overview">
+    <div class="invoice-hero">
+      <div>
+        <h3>Automate invoice review and validation</h3>
+        <p>
+          Extract vendor, amount, VAT, and date fields from invoice documents,
+          then apply business rules to determine whether the invoice should pass,
+          be reviewed, or fail.
+        </p>
+      </div>
+
+      <div class="hero-badges">
+        <span>Field Extraction</span>
+        <span>Validation Rules</span>
+        <span>Decision Support</span>
+      </div>
+    </div>
+  </app-section-card>
+
+  <div class="invoice-grid">
+    <app-section-card title="Upload Area">
+      <div class="upload-zone">
+        <div class="upload-icon">↑</div>
+        <h3>Drop invoice file here</h3>
+        <p>Supports PDF, PNG, and JPG. This upload area is mocked for demo purposes.</p>
+        <button type="button">Choose File</button>
+      </div>
+    </app-section-card>
+
+    <app-section-card title="Extracted Fields">
+      <div class="field-list">
+        <div class="field-item">
+          <span>Vendor</span>
+          <strong>{{ invoice.vendor }}</strong>
+        </div>
+
+        <div class="field-item">
+          <span>Amount</span>
+          <strong>{{ invoice.amount }}</strong>
+        </div>
+
+        <div class="field-item">
+          <span>VAT</span>
+          <strong>{{ invoice.vat }}</strong>
+        </div>
+
+        <div class="field-item">
+          <span>Date</span>
+          <strong>{{ invoice.date }}</strong>
+        </div>
+      </div>
+    </app-section-card>
+
+    <app-section-card title="Decision">
+      <div
+        class="decision-badge"
+        [class.pass]="invoice.decision === 'PASS'"
+        [class.review]="invoice.decision === 'REVIEW'"
+        [class.fail]="invoice.decision === 'FAIL'"
+      >
+        {{ invoice.decision }}
+      </div>
+
+      <div class="decision-copy">
+        <h3>Review explanation</h3>
+        <p>{{ invoice.explanation }}</p>
+      </div>
+    </app-section-card>
+  </div>
+</div>

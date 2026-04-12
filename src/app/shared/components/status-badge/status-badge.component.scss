@@ -1,0 +1,17 @@
+.badge {
+  display: inline-flex;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.badge.live {
+  background: rgba(16, 185, 129, 0.12);
+  color: #34d399;
+}
+
+.badge.coming {
+  background: rgba(245, 158, 11, 0.12);
+  color: #fbbf24;
+}
