@@ -1,30 +1,168 @@
-<app-page-title
-  title="Workspace"
-  subtitle="Launch tasks, access apps, and review recent platform activity."
-></app-page-title>
-
-<div class="workspace-page">
-  <app-section-card title="Welcome back">
-    <p class="hero-copy">
-      Access your AI workspace, launch tools, and review operational insights from one dashboard.
+<section class="chat-page">
+  <div class="chat-hero">
+    <p class="chat-kicker">AI Workspace 4.0</p>
+    <h1>Ask anything, create anything</h1>
+    <p class="chat-subtitle">
+      A polished AI workspace for prompts, drafts, summaries, explanations, and task-oriented chat.
     </p>
-  </app-section-card>
-
-  <div class="grid">
-    <app-action-card
-      *ngFor="let action of actions"
-      [title]="action.title"
-      [description]="action.description"
-      [route]="action.route"
-    ></app-action-card>
   </div>
 
-  <app-section-card title="Recent activity">
-    <ul class="activity-list">
-      <li *ngFor="let item of activity">
-        <span>{{ item.title }}</span>
-        <small>{{ item.time }}</small>
-      </li>
-    </ul>
-  </app-section-card>
-</div>
+  <div class="chat-layout">
+    <aside class="chat-sidebar">
+      <div class="side-card">
+        <div class="side-card-header">
+          <p class="side-label">Quick prompts</p>
+        </div>
+
+        <button
+          *ngFor="let prompt of quickPrompts"
+          class="prompt-chip"
+          type="button"
+          (click)="usePrompt(prompt)"
+        >
+          {{ prompt }}
+        </button>
+      </div>
+
+      <div class="side-card">
+        <div class="side-card-header">
+          <p class="side-label">Actions</p>
+        </div>
+
+        <button class="sidebar-action secondary" type="button" (click)="clearInput()">
+          Clear input
+        </button>
+        <button class="sidebar-action danger" type="button" (click)="clearChat()">
+          Clear chat
+        </button>
+      </div>
+
+      <div class="side-card">
+        <div class="side-card-header">
+          <p class="side-label">Tips</p>
+        </div>
+
+        <ul class="tips-list">
+          <li>Press Enter to send.</li>
+          <li>Use Shift+Enter for a new line.</li>
+          <li>Quick prompts fill the composer instantly.</li>
+          <li>This UI is ready to connect to a real backend.</li>
+        </ul>
+      </div>
+    </aside>
+
+    <section class="chat-card">
+      <header class="chat-header">
+        <div>
+          <p class="header-label">Assistant</p>
+          <h2>Chat UI</h2>
+        </div>
+
+        <span class="status-badge" [class.busy]="isLoading">
+          {{ isLoading ? 'Thinking...' : 'Ready' }}
+        </span>
+      </header>
+
+      <div class="messages" #messagesContainer>
+        <ng-container *ngIf="messages.length; else emptyState">
+          <div
+            *ngFor="let message of messages; trackBy: trackByMessageId"
+            class="message-row"
+            [class.user-row]="message.role === 'user'"
+          >
+            <div class="avatar" [class.user-avatar]="message.role === 'user'">
+              {{ message.role === 'user' ? 'U' : 'AI' }}
+            </div>
+
+            <article
+              class="message-bubble"
+              [class.user-bubble]="message.role === 'user'"
+            >
+              <div class="message-meta">
+                <strong>{{ message.role === 'user' ? 'You' : 'Assistant' }}</strong>
+                <span>{{ message.time }}</span>
+              </div>
+
+              <p>{{ message.content }}</p>
+            </article>
+          </div>
+        </ng-container>
+
+        <div class="message-row" *ngIf="isLoading">
+          <div class="avatar">AI</div>
+
+          <article class="message-bubble typing-bubble">
+            <div class="message-meta">
+              <strong>Assistant</strong>
+              <span>now</span>
+            </div>
+
+            <div class="typing-dots" aria-label="Assistant is typing">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </article>
+        </div>
+
+        <ng-template #emptyState>
+          <div class="empty-state">
+            <div class="empty-icon">✦</div>
+            <h3>Start a conversation</h3>
+            <p>Ask for help with writing, summaries, code, analysis, or planning.</p>
+          </div>
+        </ng-template>
+      </div>
+
+      <div class="composer-shell">
+        <div class="voice-banner">
+          <span>AI voice typing, 4x faster — try it free for 3 days, earn 1,000 credits</span>
+          <button type="button">Download now</button>
+        </div>
+
+        <div class="composer">
+          <div class="genspark-input">
+            <div class="input-area">
+              <textarea
+                #composerTextarea
+                [(ngModel)]="userPrompt"
+                rows="1"
+                placeholder="Ask anything, create anything"
+                (input)="onTextareaInput()"
+                (keydown)="handleKeydown($event)"
+              ></textarea>
+            </div>
+
+            <div class="input-actions">
+              <div class="left-actions">
+                <button class="icon-btn" type="button" title="Add">
+                  ＋
+                </button>
+                <button class="icon-btn" type="button" title="Search">
+                  ⌕
+                </button>
+                <button class="chip-btn" type="button">
+                  Ultra
+                </button>
+              </div>
+
+              <div class="right-actions">
+                <button class="mic-btn" type="button" title="Voice input">
+                  🎤
+                </button>
+                <button
+                  class="send-btn"
+                  type="button"
+                  (click)="handleAsk()"
+                  [disabled]="isLoading"
+                >
+                  {{ isLoading ? 'Sending...' : 'Speak' }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</section>

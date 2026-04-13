@@ -1,43 +1,40 @@
 <header class="topbar">
-  <div class="topbar-copy">
-    <span class="eyebrow">Enterprise AI Platform</span>
-    <h2>AI Workspace</h2>
-    <p>Monitor apps, run tasks, and review results from a unified control layer.</p>
+  <div class="promo-banner">
+    <span class="promo-copy">You're on Free. Upgrade and save $600</span>
+    <button class="promo-link" type="button" (click)="onUpgradeClick()">Upgrade Now →</button>
   </div>
 
-  <div class="topbar-actions">
-    <div class="notification-wrapper">
-      <button class="secondary-btn" type="button" (click)="toggleNotifications()">
-        Notifications
-        <span class="notification-count">{{ notifications.length }}</span>
-      </button>
+  <div class="toolbar">
+    <div>
+      <p class="eyebrow">AI workspace</p>
+      <h2>Generative app launcher</h2>
+    </div>
 
-      <div class="notification-dropdown" *ngIf="showNotifications">
-        <div class="dropdown-header">
-          <h4>Notifications</h4>
-          <button type="button" class="close-btn" (click)="closeNotifications()">×</button>
-        </div>
+    <div class="topbar-actions">
+      <div class="notification-wrapper">
+        <button class="secondary-btn" type="button" (click)="toggleNotifications()">
+          Updates <span class="notification-count">{{ notifications.length }}</span>
+        </button>
 
-        <div class="notification-list">
-          <div class="notification-item" *ngFor="let note of notifications">
-            <div
-              class="notification-dot"
-              [class.success]="note.type === 'success'"
-              [class.info]="note.type === 'info'"
-              [class.warning]="note.type === 'warning'"
-            ></div>
+        <div class="notification-dropdown" *ngIf="showNotifications">
+          <div class="dropdown-header">
+            <h4>Latest updates</h4>
+            <button class="close-btn" type="button" (click)="closeNotifications()">×</button>
+          </div>
 
-            <div class="notification-content">
-              <p>{{ note.title }}</p>
-              <span>{{ note.time }}</span>
+          <div class="notification-list">
+            <div class="notification-item" *ngFor="let note of notifications">
+              <span class="notification-dot" [class]="'notification-dot ' + note.type"></span>
+              <div class="notification-content">
+                <p>{{ note.title }}</p>
+                <span>{{ note.time }}</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <button class="primary-btn" type="button" (click)="onUpgradeClick()">
-      Upgrade Plan
-    </button>
+      <button class="primary-btn" type="button" (click)="onUpgradeClick()">Open Pro tools</button>
+    </div>
   </div>
 </header>
